@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "productivity-backend"
+version = "1.0.0"
+description = "Backend of Productivity application"
+authors = ["Amelia Jochna"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.95.2"
+psycopg2-binary = "^2.9.6"
+sqlacodegen = {git = "https://github.com/agronholm/sqlacodegen"}
+uvicorn = "^0.22.0"
+pyjwt = "^2.7.0"
+passlib = "^1.7.4"
+python-multipart = "^0.0.6"
+bcrypt = "^4.0.1"
+pytest = "^7.4.0"
+httpx = "^0.24.1"
+openai = "^0.27.8"
+
+[build-system]
+requires = ["poetry-core>=1.5.0"]
+build-backend = "poetry.core.masonry.api"
