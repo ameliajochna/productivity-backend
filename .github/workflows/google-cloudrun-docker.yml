@@ -136,7 +136,7 @@ jobs:
             ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{
             env.SERVICE}}/productivity:${{ github.sha }}
           env-vars: |
-            OPENAI_API_KEY=${{secrets.OPENAI_API_KEY}}
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
             GCP_DB_USER=${{ secrets.GCP_DB_USER }}
             GCP_DB_PASSWORD=${{ secrets.GCP_DB_PASSWORD }}
             GCP_DB_HOST=${{ secrets.GCP_DB_HOST }}
