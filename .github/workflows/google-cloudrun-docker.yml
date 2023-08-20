@@ -7,7 +7,7 @@ on:
 env:
   PROJECT_ID: avid-garage-390413
   GAR_LOCATION: europe-central2
-  SERVICE: productivity-backend
+  SERVICE: productivity
   REGION: us-central1
 
 jobs:
@@ -32,21 +32,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Debug
-        run: |
-          export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
-          echo $#OPENAI_API_KEY
-          export GCP_DB_USER=${{ secrets.GCP_DB_USER }}
-          echo $#GCP_DB_USER
-          export GCP_DB_PASSWORD=${{ secrets.GCP_DB_PASSWORD }}
-          echo $#GCP_DB_PASSWORD
-          export GCP_DB_HOST=${{ secrets.GCP_DB_HOST }}
-          echo $#GCP_DB_HOST
-          export GCP_DB_PORT=${{ secrets.GCP_DB_PORT }}
-          echo $#GCP_DB_PORT
-          export GCP_DB_NAME=${{ secrets.GCP_DB_NAME }}
-          echo $#GCP_DB_NAME
 
       - name: Install PostgreSQL client
         run: |
@@ -101,6 +86,15 @@ jobs:
           GCP_DB_NAME: ${{ secrets.GCP_DB_NAME }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
+      - name: Debug
+        run: |
+          python3 -c "import os; print(len(os.environ['GCP_DB_USER']))"
+          python3 -c "import os; print(len(os.environ['GCP_DB_PASSWORD']))"
+          python3 -c "import os; print(len(os.environ['GCP_DB_HOST']))"
+          python3 -c "import os; print(len(os.environ['GCP_DB_PORT']))"
+          python3 -c "import os; print(len(os.environ['GCP_DB_NAME']))"
+          python3 -c "import os; print(len(os.environ['OPENAI_API_KEY']))"
+
       - name: Run tests
         run: |
           poetry run pytest -s
@@ -148,7 +142,8 @@ jobs:
           service: ${{ env.SERVICE }}
           region: ${{ env.REGION }}
           image:
-            ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/productivity:${{ github.sha }}
+            ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE
+            }}/productivity:${{ github.sha }}
           env-vars: |
             OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
             GCP_DB_USER=${{ secrets.GCP_DB_USER }}
