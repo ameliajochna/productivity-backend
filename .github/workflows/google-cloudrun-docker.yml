@@ -86,15 +86,6 @@ jobs:
           GCP_DB_NAME: ${{ secrets.GCP_DB_NAME }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
-      - name: Debug
-        run: |
-          python3 -c "import os; print(len(os.environ['GCP_DB_USER']))"
-          python3 -c "import os; print(len(os.environ['GCP_DB_PASSWORD']))"
-          python3 -c "import os; print(len(os.environ['GCP_DB_HOST']))"
-          python3 -c "import os; print(len(os.environ['GCP_DB_PORT']))"
-          python3 -c "import os; print(len(os.environ['GCP_DB_NAME']))"
-          python3 -c "import os; print(len(os.environ['OPENAI_API_KEY']))"
-
       - name: Run tests
         run: |
           poetry run pytest -s
