@@ -35,12 +35,18 @@ jobs:
 
       - name: Debug
         run: |
-          echo "Length of OPENAI_API_KEY: ${#{{ secrets.OPENAI_API_KEY }}}"
-          echo "Length of GCP_DB_USER: ${#{{ secrets.GCP_DB_USER }}}"
-          echo "Length of GCP_DB_PASSWORD: ${#{{ secrets.GCP_DB_PASSWORD }}}"
-          echo "Length of GCP_DB_HOST: ${#{{ secrets.GCP_DB_HOST }}}"
-          echo "Length of GCP_DB_PORT: ${#{{ secrets.GCP_DB_PORT }}}"
-          echo "Length of GCP_DB_NAME: ${#{{ secrets.GCP_DB_NAME }}}"
+          export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+          echo "Length of OPENAI_API_KEY: $#OPENAI_API_KEY"
+          export GCP_DB_USER=${{ secrets.GCP_DB_USER }}
+          echo "Length of GCP_DB_USER: $#GCP_DB_USER"
+          export GCP_DB_PASSWORD=${{ secrets.GCP_DB_PASSWORD }}
+          echo "Length of GCP_DB_PASSWORD: $#GCP_DB_PASSWORD"
+          export GCP_DB_HOST=${{ secrets.GCP_DB_HOST }}
+          echo "Length of GCP_DB_HOST: $#GCP_DB_HOST"
+          export GCP_DB_PORT=${{ secrets.GCP_DB_PORT }}
+          echo "Length of GCP_DB_PORT: $#GCP_DB_PORT"
+          export GCP_DB_NAME=${{ secrets.GCP_DB_NAME }}
+          echo "Length of GCP_DB_NAME: $#GCP_DB_NAME"
 
       - name: Install PostgreSQL client
         run: |
