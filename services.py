@@ -48,7 +48,9 @@ def verify_password(user: models.Users, password: str) -> bool:
 
 
 async def authenticate_user(
-    email: str, password: str, db: _orm.Session
+    email: str,
+    password: str,
+    db: _orm.Session,
 ) -> models.Users | bool:
     user = await get_user_by_email(db=db, email=email)
 
@@ -62,7 +64,9 @@ async def authenticate_user(
 
 
 async def authenticate_company(
-    email: str, password: str, db: _orm.Session
+    email: str,
+    password: str,
+    db: _orm.Session,
 ) -> models.Companies | bool:
     company = await get_company_by_email(email=email, db=db)
 
@@ -115,7 +119,9 @@ async def get_tasks(user: schemas.User, db: _orm.Session) -> list:
 
 
 async def _task_selector(
-    task_id: int, user: schemas.User, db: _orm.Session
+    task_id: int,
+    user: schemas.User,
+    db: _orm.Session,
 ) -> models.Tasks:
     task = (
         db.query(
@@ -240,7 +246,8 @@ async def get_all_company_data(db: _orm.Session) -> list[dict[str, int | str]]:
 
 
 async def get_employee_by_email(
-    employee: schemas._EmployeeBase, db: _orm.Session
+    employee: schemas._EmployeeBase,
+    db: _orm.Session,
 ) -> models.Employees:
     return (  # type: ignore[no-any-return]
         db.query(models.Employees)
