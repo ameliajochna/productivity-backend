@@ -107,7 +107,12 @@ async def get_tasks(user: schemas.User, db: _orm.Session):
 
 
 async def _task_selector(task_id: int, user: schemas.User, db: _orm.Session):
-    task = db.query(models.Tasks).filter_by(owner_id=user.id).filter(models.Tasks.id == task_id).first()
+    task = (
+        db.query(models.Tasks)
+        .filter_by(owner_id=user.id)
+        .filter(models.Tasks.id == task_id)
+        .first()
+    )
 
     if task is None:
         raise fastapi.HTTPException(status_code=404, detail="Task does not exist")
@@ -244,7 +249,13 @@ async def create_employee(employee: schemas._EmployeeBase, db: _orm.Session):
 
 
 async def get_employees_tasks(company: schemas.Company, db: _orm.Session):
-    employees_obj = db.query(models.Employees).filter(models.Employees.company_id == company.id).all()
+    employees_obj = (
+        db.query(
+            models.Employees,
+        )
+        .filter(models.Employees.company_id == company.id)
+        .all()
+    )
 
     employees_tasks = []
     for employee in employees_obj:
