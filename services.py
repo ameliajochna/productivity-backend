@@ -195,7 +195,8 @@ async def get_company_by_email(email: str, db: _orm.Session) -> models.Companies
 
 
 async def create_company(
-    company: schemas.CompanyCreate, db: _orm.Session
+    company: schemas.CompanyCreate,
+    db: _orm.Session,
 ) -> models.Companies:
     company_obj = models.Companies(
         email=company.email,
@@ -254,7 +255,8 @@ async def get_employee_by_email(
 
 
 async def create_employee(
-    employee: schemas._EmployeeBase, db: _orm.Session
+    employee: schemas._EmployeeBase,
+    db: _orm.Session,
 ) -> models.Employees:
     employee_obj = models.Employees(
         company_id=employee.company_id,
