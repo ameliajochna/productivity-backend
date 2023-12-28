@@ -20,14 +20,18 @@ class Base(DeclarativeBase):
 
 
 class Companies(Base):
-    __tablename__ = 'companies'
+    __tablename__ = "companies"
     __table_args__ = (
-        PrimaryKeyConstraint('id', name='companies_pkey'),
-        UniqueConstraint('email', name='companies_email_key'),
+        PrimaryKeyConstraint("id", name="companies_pkey"),
+        UniqueConstraint("email", name="companies_email_key"),
     )
 
     id: Mapped[int] = mapped_column(
-        Integer, Identity(start=1, increment=1, minvalue=1, maxvalue=2147483647, cycle=False, cache=1), primary_key=True
+        Integer,
+        Identity(
+            start=1, increment=1, minvalue=1, maxvalue=2147483647, cycle=False, cache=1
+        ),
+        primary_key=True,
     )
     email: Mapped[str] = mapped_column(String(255))
     name: Mapped[str] = mapped_column(String(255))
@@ -35,28 +39,28 @@ class Companies(Base):
 
 
 t_databasechangelog = Table(
-    'databasechangelog',
+    "databasechangelog",
     Base.metadata,
-    Column('id', String(255), nullable=False),
-    Column('author', String(255), nullable=False),
-    Column('filename', String(255), nullable=False),
-    Column('dateexecuted', DateTime, nullable=False),
-    Column('orderexecuted', Integer, nullable=False),
-    Column('exectype', String(10), nullable=False),
-    Column('md5sum', String(35)),
-    Column('description', String(255)),
-    Column('comments', String(255)),
-    Column('tag', String(255)),
-    Column('liquibase', String(20)),
-    Column('contexts', String(255)),
-    Column('labels', String(255)),
-    Column('deployment_id', String(10)),
+    Column("id", String(255), nullable=False),
+    Column("author", String(255), nullable=False),
+    Column("filename", String(255), nullable=False),
+    Column("dateexecuted", DateTime, nullable=False),
+    Column("orderexecuted", Integer, nullable=False),
+    Column("exectype", String(10), nullable=False),
+    Column("md5sum", String(35)),
+    Column("description", String(255)),
+    Column("comments", String(255)),
+    Column("tag", String(255)),
+    Column("liquibase", String(20)),
+    Column("contexts", String(255)),
+    Column("labels", String(255)),
+    Column("deployment_id", String(10)),
 )
 
 
 class Databasechangeloglock(Base):
-    __tablename__ = 'databasechangeloglock'
-    __table_args__ = (PrimaryKeyConstraint('id', name='databasechangeloglock_pkey'),)
+    __tablename__ = "databasechangeloglock"
+    __table_args__ = (PrimaryKeyConstraint("id", name="databasechangeloglock_pkey"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     locked: Mapped[bool] = mapped_column(Boolean)
@@ -65,33 +69,40 @@ class Databasechangeloglock(Base):
 
 
 class Employees(Base):
-    __tablename__ = 'employees'
-    __table_args__ = (PrimaryKeyConstraint('id', name='employees_pkey'),)
+    __tablename__ = "employees"
+    __table_args__ = (PrimaryKeyConstraint("id", name="employees_pkey"),)
 
     id: Mapped[int] = mapped_column(
-        Integer, Identity(start=1, increment=1, minvalue=1, maxvalue=2147483647, cycle=False, cache=1), primary_key=True
+        Integer,
+        Identity(
+            start=1, increment=1, minvalue=1, maxvalue=2147483647, cycle=False, cache=1
+        ),
+        primary_key=True,
     )
     company_id: Mapped[int] = mapped_column(Integer)
     user_email: Mapped[str] = mapped_column(String(255))
 
 
 class Users(Base):
-    __tablename__ = 'users'
-    __table_args__ = (PrimaryKeyConstraint('id', name='users_pkey'), UniqueConstraint('email', name='users_email_key'))
+    __tablename__ = "users"
+    __table_args__ = (
+        PrimaryKeyConstraint("id", name="users_pkey"),
+        UniqueConstraint("email", name="users_email_key"),
+    )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     email: Mapped[str] = mapped_column(String(255))
     hashed_password: Mapped[str] = mapped_column(String(255))
     name: Mapped[str | None] = mapped_column(String(255))
 
-    tasks: Mapped[list['Tasks']] = relationship('Tasks', back_populates='owner')
+    tasks: Mapped[list["Tasks"]] = relationship("Tasks", back_populates="owner")
 
 
 class Tasks(Base):
-    __tablename__ = 'tasks'
+    __tablename__ = "tasks"
     __table_args__ = (
-        ForeignKeyConstraint(['owner_id'], ['users.id'], name='tasks_owner_id_fkey'),
-        PrimaryKeyConstraint('id', name='tasks_pkey'),
+        ForeignKeyConstraint(["owner_id"], ["users.id"], name="tasks_owner_id_fkey"),
+        PrimaryKeyConstraint("id", name="tasks_pkey"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -101,4 +112,4 @@ class Tasks(Base):
     description: Mapped[str | None] = mapped_column(String(255))
     state: Mapped[str | None] = mapped_column(String(11))
 
-    owner: Mapped['Users'] = relationship('Users', back_populates='tasks')
+    owner: Mapped["Users"] = relationship("Users", back_populates="tasks")
