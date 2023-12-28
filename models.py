@@ -20,7 +20,12 @@ class Companies(Base):
     id: Mapped[int] = mapped_column(
         Integer,
         Identity(
-            start=1, increment=1, minvalue=1, maxvalue=2147483647, cycle=False, cache=1
+            start=1,
+            increment=1,
+            minvalue=1,
+            maxvalue=2147483647,
+            cycle=False,
+            cache=1,
         ),
         primary_key=True,
     )
