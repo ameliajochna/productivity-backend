@@ -7,7 +7,7 @@ from fastapi.openapi.utils import get_openapi
 from main import app
 
 
-def test_openapi():
+def test_openapi() -> None:
     tmp_openapi_file_path = "tests/openapi_gen.json"
 
     with open(tmp_openapi_file_path, "w") as f:

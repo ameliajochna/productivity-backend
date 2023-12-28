@@ -2,7 +2,7 @@ import filecmp
 import subprocess
 
 
-def test_db():
+def test_db() -> None:
     tmp_models_file_path = "tests/models_gen.py"
     result = subprocess.run(
         [

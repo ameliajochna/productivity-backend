@@ -29,7 +29,7 @@ app.route("/")
 async def create_user(
     user: schemas.UserCreate,
     db: _orm.Session = fastapi.Depends(services.get_db),
-):
+) -> dict:
     db_user = await services.get_user_by_email(user.email, db)
     if db_user:
         raise fastapi.HTTPException(status_code=400, detail="Email already in use")
@@ -41,10 +41,10 @@ async def create_user(
 
 @app.post("/api/token")
 async def generate_token(
-    type,
+    type: str,
     form_data: _security.OAuth2PasswordRequestForm = fastapi.Depends(),
     db: _orm.Session = fastapi.Depends(services.get_db),
-):
+) -> dict:
     if type == "user":
         user = await services.authenticate_user(
             form_data.username,
@@ -60,7 +60,7 @@ async def generate_token(
 
         return await services.create_token(user)
 
-    if type == "company":
+    elif type == "company":
         company = await services.authenticate_company(
             form_data.username,
             form_data.password,
@@ -75,9 +75,17 @@ async def generate_token(
 
         return await services.create_company_token(company)
 
+    else:
+        raise fastapi.HTTPException(
+            status_code=403,
+            detail="Invalid token type.",
+        )
+
 
 @app.get("/api/users/me", response_model=schemas.User)
-async def get_user(user: schemas.User = fastapi.Depends(services.get_current_user)):
+async def get_user(
+    user: schemas.User = fastapi.Depends(services.get_current_user),
+) -> schemas.User:
     return user
 
 
@@ -86,7 +94,7 @@ async def create_task(
     task: schemas.TaskCreate,
     user: schemas.User = fastapi.Depends(services.get_current_user),
     db: _orm.Session = fastapi.Depends(services.get_db),
-):
+) -> schemas.Task:
     return await services.create_task(user=user, db=db, task=task)
 
 
@@ -94,7 +102,7 @@ async def create_task(
 async def get_tasks(
     user: schemas.User = fastapi.Depends(services.get_current_user),
     db: _orm.Session = fastapi.Depends(services.get_db),
-):
+) -> list[schemas.Task]:
     return await services.get_tasks(user=user, db=db)
 
 
@@ -103,7 +111,7 @@ async def get_task(
     task_id: int,
     user: schemas.User = fastapi.Depends(services.get_current_user),
     db: _orm.Session = fastapi.Depends(services.get_db),
-):
+) -> list:
     return await services.get_task(task_id, user, db)
 
 
@@ -112,7 +120,7 @@ async def delete_task(
     task_id: int,
     user: schemas.User = fastapi.Depends(services.get_current_user),
     db: _orm.Session = fastapi.Depends(services.get_db),
-):
+) -> None:
     return await services.delete_task(task_id, user, db)
 
 
@@ -122,7 +130,7 @@ async def update_task(
     task: schemas.TaskCreate,
     user: schemas.User = fastapi.Depends(services.get_current_user),
     db: _orm.Session = fastapi.Depends(services.get_db),
-):
+) -> schemas.Task:
     return await services.update_task(task_id, task, user, db)
 
 
@@ -132,7 +140,7 @@ async def update_password(
     changepassword: schemas.ChangePassword,
     user: schemas.User = fastapi.Depends(services.get_current_user),
     db: _orm.Session = fastapi.Depends(services.get_db),
-):
+) -> schemas.User:
     return await services.update_password(user_id, changepassword, user, db)
 
 
@@ -140,7 +148,7 @@ async def update_password(
 async def create_company(
     company: schemas.CompanyCreate,
     db: _orm.Session = fastapi.Depends(services.get_db),
-):
+) -> dict:
     db_company = await services.get_company_by_email(company.email, db)
     if db_company:
         raise fastapi.HTTPException(status_code=400, detail="Email already in use")
@@ -153,12 +161,14 @@ async def create_company(
 @app.get("/api/companies/me", response_model=schemas.Company)
 async def get_company(
     company: schemas.Company = fastapi.Depends(services.get_current_company),
-):
+) -> schemas.Company:
     return company
 
 
 @app.get("/api/companies/names")
-async def get_all_companies(db: _orm.Session = fastapi.Depends(services.get_db)):
+async def get_all_companies(
+    db: _orm.Session = fastapi.Depends(services.get_db),
+) -> list:
     return await services.get_all_company_data(db)
 
 
@@ -166,7 +176,7 @@ async def get_all_companies(db: _orm.Session = fastapi.Depends(services.get_db))
 async def create_employee(
     employee: schemas._EmployeeBase,
     db: _orm.Session = fastapi.Depends(services.get_db),
-):
+) -> models.Employees:
     db_employee = await services.get_employee_by_email(employee, db)
     if db_employee:
         raise fastapi.HTTPException(status_code=400, detail="Connection already made")
@@ -178,7 +188,7 @@ async def create_employee(
 async def get_employees_tasks(
     company: schemas.Company = fastapi.Depends(services.get_current_company),
     db: _orm.Session = fastapi.Depends(services.get_db),
-):
+) -> list:
     return await services.get_employees_tasks(company, db)
 
 
@@ -187,7 +197,7 @@ openai.api_key = api_key
 
 
 @app.post("/ask_gpt", response_model=schemas.ChatGPTResponse)
-async def ask_gpt(chatgpt_request: schemas.ChatGPTRequest):
+async def ask_gpt(chatgpt_request: schemas.ChatGPTRequest) -> schemas.ChatGPTResponse:
     try:
         response = openai.Completion.create(
             engine="text-davinci-003",
