@@ -22,7 +22,7 @@ class Companies(Base):
         Identity(
             start=1, increment=1, minvalue=1, maxvalue=2147483647, cycle=False, cache=1
         ),
-        primary_key=True
+        primary_key=True,
     )
     email: Mapped[str] = mapped_column(String(255))
     name: Mapped[str] = mapped_column(String(255))
@@ -36,7 +36,12 @@ class Employees(Base):
     id: Mapped[int] = mapped_column(
         Integer,
         Identity(
-            start=1, increment=1, minvalue=1, maxvalue=2147483647, cycle=False, cache=1,
+            start=1,
+            increment=1,
+            minvalue=1,
+            maxvalue=2147483647,
+            cycle=False,
+            cache=1,
         ),
         primary_key=True,
     )
@@ -54,7 +59,12 @@ class Users(Base):
     id: Mapped[int] = mapped_column(
         Integer,
         Identity(
-            start=91, increment=1, minvalue=1, maxvalue=2147483647, cycle=False, cache=1,
+            start=91,
+            increment=1,
+            minvalue=1,
+            maxvalue=2147483647,
+            cycle=False,
+            cache=1,
         ),
         primary_key=True,
     )
