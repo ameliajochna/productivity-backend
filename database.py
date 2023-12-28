@@ -15,8 +15,6 @@ DATABASE_URL = f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{name}"
 
 engine = sqlalchemy.create_engine(DATABASE_URL)
 
-SessionLocal = sqlalchemy.orm.sessionmaker(
-    autocommit=False, autoflush=False, bind=engine
-)
+SessionLocal = sqlalchemy.orm.sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = sqlalchemy.orm.declarative_base()
