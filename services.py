@@ -108,7 +108,9 @@ async def get_tasks(user: schemas.User, db: _orm.Session):
 
 async def _task_selector(task_id: int, user: schemas.User, db: _orm.Session):
     task = (
-        db.query(models.Tasks)
+        db.query(
+            models.Tasks,
+        )
         .filter_by(owner_id=user.id)
         .filter(models.Tasks.id == task_id)
         .first()
