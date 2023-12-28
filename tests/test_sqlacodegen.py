@@ -18,10 +18,14 @@ def test_db():
     print(result.stderr)
     print(result.stdout)
 
-    pre_commit = subprocess.run(["pre-commit", "run", "--files", tmp_models_file_path], capture_output=True)
+    pre_commit = subprocess.run(
+        ["pre-commit", "run", "--files", tmp_models_file_path], capture_output=True
+    )
     print(pre_commit.stderr)
     print(pre_commit.stdout)
-    pre_commit = subprocess.run(["pre-commit", "run", "--files", tmp_models_file_path], capture_output=True)
+    pre_commit = subprocess.run(
+        ["pre-commit", "run", "--files", tmp_models_file_path], capture_output=True
+    )
     print(pre_commit.stderr)
     print(pre_commit.stdout)
 

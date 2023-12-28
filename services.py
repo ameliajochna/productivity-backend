@@ -107,7 +107,12 @@ async def get_tasks(user: schemas.User, db: _orm.Session):
 
 
 async def _task_selector(task_id: int, user: schemas.User, db: _orm.Session):
-    task = db.query(models.Tasks).filter_by(owner_id=user.id).filter(models.Tasks.id == task_id).first()
+    task = (
+        db.query(models.Tasks)
+        .filter_by(owner_id=user.id)
+        .filter(models.Tasks.id == task_id)
+        .first()
+    )
 
     if task is None:
         raise fastapi.HTTPException(status_code=404, detail="Task does not exist")
@@ -127,7 +132,9 @@ async def delete_task(task_id: int, user: schemas.User, db: _orm.Session):
     db.commit()
 
 
-async def update_task(task_id: int, task: schemas.TaskCreate, user: schemas.User, db: _orm.Session):
+async def update_task(
+    task_id: int, task: schemas.TaskCreate, user: schemas.User, db: _orm.Session
+):
     task_db = await _task_selector(task_id, user, db)
     task_db.state = task.state
     task_db.title = task.title
@@ -152,7 +159,9 @@ async def update_password(
         raise fastapi.HTTPException(status_code=401, detail="Invalid password")
 
     if changepassword.new_password != changepassword.confirm_password:
-        raise fastapi.HTTPException(status_code=401, detail="The passwords are not the same")
+        raise fastapi.HTTPException(
+            status_code=401, detail="The passwords are not the same"
+        )
 
     hashed_password = _hash.bcrypt.hash(changepassword.new_password)
 
@@ -225,7 +234,9 @@ async def get_employee_by_email(employee: schemas._EmployeeBase, db: _orm.Sessio
 
 
 async def create_employee(employee: schemas._EmployeeBase, db: _orm.Session):
-    employee_obj = models.Employees(company_id=employee.company_id, user_email=employee.user_email)
+    employee_obj = models.Employees(
+        company_id=employee.company_id, user_email=employee.user_email
+    )
     db.add(employee_obj)
     db.commit()
     db.refresh(employee_obj)
@@ -233,7 +244,11 @@ async def create_employee(employee: schemas._EmployeeBase, db: _orm.Session):
 
 
 async def get_employees_tasks(company: schemas.Company, db: _orm.Session):
-    employees_obj = db.query(models.Employees).filter(models.Employees.company_id == company.id).all()
+    employees_obj = (
+        db.query(models.Employees)
+        .filter(models.Employees.company_id == company.id)
+        .all()
+    )
 
     employees_tasks = []
     for employee in employees_obj:

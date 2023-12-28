@@ -46,7 +46,9 @@ async def generate_token(
     db: _orm.Session = fastapi.Depends(services.get_db),
 ):
     if type == "user":
-        user = await services.authenticate_user(form_data.username, form_data.password, db)
+        user = await services.authenticate_user(
+            form_data.username, form_data.password, db,
+        )
 
         if not user:
             raise fastapi.HTTPException(
@@ -57,7 +59,9 @@ async def generate_token(
         return await services.create_token(user)
 
     if type == "company":
-        company = await services.authenticate_company(form_data.username, form_data.password, db)
+        company = await services.authenticate_company(
+            form_data.username, form_data.password, db,
+        )
 
         if not company:
             raise fastapi.HTTPException(
@@ -129,7 +133,9 @@ async def update_password(
 
 
 @app.post("/api/companies", status_code=200)
-async def create_company(company: schemas.CompanyCreate, db: _orm.Session = fastapi.Depends(services.get_db)):
+async def create_company(
+    company: schemas.CompanyCreate, db: _orm.Session = fastapi.Depends(services.get_db),
+):
     db_company = await services.get_company_by_email(company.email, db)
     if db_company:
         raise fastapi.HTTPException(status_code=400, detail="Email already in use")
@@ -152,7 +158,9 @@ async def get_all_companies(db: _orm.Session = fastapi.Depends(services.get_db))
 
 
 @app.post("/api/employees")
-async def create_employee(employee: schemas._EmployeeBase, db: _orm.Session = fastapi.Depends(services.get_db)):
+async def create_employee(
+    employee: schemas._EmployeeBase, db: _orm.Session = fastapi.Depends(services.get_db),
+):
     db_employee = await services.get_employee_by_email(employee, db)
     if db_employee:
         raise fastapi.HTTPException(status_code=400, detail="Connection already made")
